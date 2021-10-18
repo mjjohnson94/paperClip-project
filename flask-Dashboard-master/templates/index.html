@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html lang="en">
+</html>
+
+<head>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mapbox-gl/1.13.2/mapbox-gl.js" integrity="sha512-Dx9gzcgymjHriPzjm7Ay1zVYnAYZrvyFPn/Vo7rOmVKZZqOTPkyBUGxry10K/PAikvTzSiDZMB/960XdJWqAjg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap" rel="stylesheet">
+
+    <style>
+
+        body    {
+            background-color: #1E1E2F;
+            font-family: "Poppins", sans-serif;
+        }
+        
+   
+        p {
+          color: white;
+          font-weight: 300px;
+        }
+
+        h1  {
+          color: white;
+          text-align: center;
+          padding-bottom: 15px;
+        }
+
+        h2  {
+          color: white;
+          text-align: center;
+          font-size: 24px;
+          font-weight: bold;
+          padding-top: 5px;
+        }
+
+        .form-control.rounded {
+          width: 400px;
+          
+        }
+
+        .input-group  {
+          padding-left: 550px;
+        }
+
+
+        hr  {
+          background-color: white;
+          color: white;
+        }
+
+        hr.break  {
+          color: #e14eca;
+          background-color: #e14eca;
+        }
+
+        .hello  {
+            background-color:#27293d;
+            border-radius: 8px;
+            text-align: left;
+            font-family: "Poppins", sans-serif;
+            color: white
+         }
+
+        .bye    {
+            background-color: #27293d;
+            border-radius: 8px;
+            text-align: left;
+            font-family: "Poppins", sans-serif;
+            color: #ffffff;
+            text-transform: inherit;
+            font-weight: 300;
+
+        }
+
+        .container  { 
+            margin-top: 25px;
+        }
+
+        .col-sm {
+            height: 275px;
+            text-align: left;
+        }
+
+        .col-sm-8   {
+            height: 250px;
+            text-align: left;
+        }
+
+        .bg-info {
+            background-color:#27293d !important;
+            border-radius: 8px;
+            font-family: "Poppins", sans-serif;
+            color: white;
+            text-align: left;
+            height: 250px;
+            font-size: 10px;
+}
+
+
+          button  {
+            margin-left: 10px;
+            color: #e14eca;
+            background-color: #e14eca;
+          }
+          .btn-outline-primary {
+            color: white;
+            border-color: #e14eca;
+            font-family: "Poppins", sans-serif;
+       
+}
+
+          .col-6  {
+          background-color: #1E1E2F;
+}
+
+
+          .scorecard  {
+            color: #e14eca;
+            font-size: 85px;
+            text-align: center;
+            
+          }
+
+          canvas  {
+            border-radius: 8px;
+            padding-bottom: 15px;
+          }
+
+          .map  {
+            padding-bottom: 15px;
+
+          }
+
+          #table-scroll {
+          height:150px;
+          overflow:auto;  
+          margin-top:20px;
+          color: white;
+          text-align: center;
+          font-size: 14px;
+          }
+
+          th  {
+          text-align: center;
+           }
+
+     
+        
+    </style>
+
+</head>
+
+ <body>
+
+  <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+    <div class="container-fluid">
+      <div class="navbar-wrapper">
+        <div class="navbar-toggle d-inline">
+        </div>
+        <a class="navbar-brand" href="javascript:void(0)">
+          <p>LIVE DASHBOARD</p>
+          <hr class="break">
+        </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+ 
+
+  <h1> | paperClip
+  </h1>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="container col-md-10">
+    <div class="welcome">
+<div class="row">
+    <div class="text-center col-8 pe-md-4">
+        <div class="bg-info">
+          <h2>Live Tweet Stream</h2>
+          <hr>
+          <div class="table table-borderless" id="table-scroll">
+        
+          {% for table in tables %}
+            {{titles[loop.index]}}
+            {{ table|safe }}
+          {% endfor %}
+    
+        </div>
+    </div>
+  </div>
+    <div class="text-center col-4 px-md-4">
+        <div class="bg-info">
+          <h2>Net Compound Sentiment Score</h2>
+          <hr class="break">
+          <div class="scorecard">
+            {{ scorecard }} 
+          </div>
+       </div>
+     </div> 
+    </div>  
+  </div>
+</div>
+
+
+    <div class="container col-md-10"> 
+     <div class="row">
+      <div class="col-8">  
+            <div class="chart2" id="bargraph2">
+              <script>
+                  var graph2 = {{plot2 | safe}};
+                  Plotly.plot('bargraph2',graph2,{});
+              </script>
+          </div>
+        </div>
+        <div class="col-4">  
+          <div class="chart" id="bargraph3">
+            <script>
+                var graphs = {{plot | safe}};
+                Plotly.plot('bargraph3',graphs,{});
+            </script>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container col-md-10">
+    <div class="map" id="map">
+      <script>
+        var maps = {{map | safe}};
+        Plotly.plot('map',maps,{});
+    </script>
+    </div>
+  </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  
+
+</body>
+
+
+</html>
